@@ -83,48 +83,75 @@ const popup = document.getElementById("feedback-popup");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
 
-const miaContainer = document.getElementById("mia-container");
-const miaWindow = document.querySelector("#mia-container .letter-window");
-
-const correctAnswers = ["mia", "mohan"];
+const correctSound = document.getElementById("correctSound");
+const blankSound = document.getElementById("blankSound");
+const wrongSound = document.getElementById("wrongSound");
 
 submitBtn.addEventListener("click", () => {
     const answer = userAnswer.value.trim().toLowerCase();
 
-    if (correctAnswers.includes(answer)) {
-
-        popupText.textContent = "Correct! MWAAH😘😘";
-        popupText.style.color = "green";
-
-        popupButton.textContent = "One More!";
-
-        popupButton.onclick = () => {
-            yess.style.display = "none";
-            confirm.style.display = "flex";
-
-            popup.classList.remove("show");
-            userAnswer.value = "";
-
+    // Send answer to server
+    fetch("check_answer.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "answer=" + encodeURIComponent(answer)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "blank") {
+            // Play correct sound after 0.8s
             setTimeout(() => {
-                confirmWindow.classList.add("open");
-            }, 50);
-        };
+                blankSound.currentTime = 0;
+                blankSound.play();
+            }, 500);
 
-    } else {
+            popupText.textContent = "Heyy, type something first Rat! 😤";
+            popupText.style.color = "orange";
 
-        popupText.textContent = "Don't Lie! GRR";
-        popupText.style.color = "red";
+            popupButton.textContent = "OK";
+            popupButton.onclick = () => popup.classList.remove("show");
 
-        popupButton.textContent = "OK";
+        } else if (data.status === "correct") {
+            setTimeout(() => {
+                correctSound.currentTime = 0;
+                correctSound.play();
+            }, 500);
 
-        popupButton.onclick = () => {
-            popup.classList.remove("show");
-            userAnswer.value = "";
-        };
-    }
+            popupText.textContent = "Correct! MWAAH😘😘";
+            popupText.style.color = "green";
 
-    popup.classList.add("show");
+            popupButton.textContent = "One More!";
+            popupButton.onclick = () => {
+                yess.style.display = "none";
+                confirm.style.display = "flex";
+
+                popup.classList.remove("show");
+                userAnswer.value = "";
+
+                setTimeout(() => confirmWindow.classList.add("open"), 50);
+            };
+
+        } else if (data.status === "wrong") {
+            setTimeout(() => {
+                wrongSound.currentTime = 0;
+                wrongSound.play();
+            }, 500);
+
+            popupText.textContent = "Don't Lie! GRR 🐧";
+            popupText.style.color = "red";
+
+            popupButton.textContent = "OK";
+            popupButton.onclick = () => {
+                popup.classList.remove("show");
+                userAnswer.value = "";
+            };
+        }
+
+        popup.classList.add("show");
+    });
 });
+
+
 
 const ignBtn = document.getElementById("submit-ign");
 const ignAnswer = document.getElementById("ign-answer");
@@ -133,45 +160,76 @@ const ignPopup = document.getElementById("ign-popup");
 const ignText = document.getElementById("ign-text");
 const ignButton = document.getElementById("ign-button");
 
-const answerIgn = ["legendaryninja28"];
+const miaContainer = document.getElementById("mia-container");
+const miaWindow = document.querySelector("#mia-container .letter-window");
 
 ignBtn.addEventListener("click", () => {
-    const answers = ignAnswer.value.trim().toLowerCase();
+    const answer = ignAnswer.value.trim().toLowerCase();
 
-    if (answerIgn.includes(answers)) {
-
-        ignText.textContent = "Correct! MWAAH😘😘";
-        ignText.style.color = "green";
-
-        ignButton.textContent = "Next";
-
-        ignButton.onclick = () => {
-            confirm.style.display = "none";
-            miaContainer.style.display = "flex";
-
-            ignPopup.classList.remove("show");
-            ignAnswer.value = "";
-
+    // Send answer to server
+    fetch("check_ign.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "answer=" + encodeURIComponent(answer)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "blank") {
+            // Play correct sound after 0.8s
             setTimeout(() => {
-                miaWindow.classList.add("open");
-            }, 50);
-        };
+                blankSound.currentTime = 0;
+                blankSound.play();
+            }, 500);
 
-    } else {
+            ignText.textContent = "Heyy, you forgot to type something Rat! 😤";
+            ignText.style.color = "orange";
 
-        ignText.textContent = "Rat, try again! GRR";
-        ignText.style.color = "red";
+            ignButton.textContent = "OK";
+            ignButton.onclick = () => ignPopup.classList.remove("show");
 
-        ignButton.textContent = "OK";
+        } else if (data.status === "correct") {
+            setTimeout(() => {
+                correctSound.currentTime = 0;
+                correctSound.play();
+            }, 500);
 
-        ignButton.onclick = () => {
-            ignPopup.classList.remove("show");
-            ignAnswer.value = "";
-        };
-    }
+            ignText.textContent = "Correct! MWAAH😘😘";
+            ignText.style.color = "green";
 
-    ignPopup.classList.add("show");
+            ignButton.textContent = "Next";
+            ignButton.onclick = () => {
+                confirm.style.display = "none";
+                miaContainer.style.display = "flex";
+
+                ignPopup.classList.remove("show");
+                ignAnswer.value = "";
+
+                setTimeout(() => {
+                    miaWindow.classList.add("open");
+                }, 50);
+            };
+
+        } else if (data.status === "wrong") {
+            setTimeout(() => {
+                wrongSound.currentTime = 0;
+                wrongSound.play();
+            }, 500);
+
+            ignText.textContent = "Rat, try again! GRR 🐧";
+            ignText.style.color = "red";
+
+            ignButton.textContent = "OK";
+            ignButton.onclick = () => {
+                ignPopup.classList.remove("show");
+                ignAnswer.value = "";
+            };
+        }
+
+        ignPopup.classList.add("show");
+    });
 });
+
+
 
 
 // Backgroud Audio
@@ -198,7 +256,7 @@ envelope.addEventListener("click", function () {
     }, 2000); // 1500ms = 1.5 seconds
   });
 
-//   Envelope sounds
+//   Furina sounds
 const furinaSound = document.getElementById("furinaSound");
 const furinaImg = document.getElementById("message-img-container");
 
@@ -206,6 +264,30 @@ furinaImg.addEventListener("click", function () {
     furinaSound.currentTime = 0;
     furinaSound.play();
   });
+
+//   Yes sounds
+const yesSound = document.getElementById("yesSound");
+const yesImg = document.getElementById("yes-img");
+
+yesImg.addEventListener("click", function () {
+    yesSound.currentTime = 0;
+    yesSound.play();
+  });
+
+//   Normal sounds
+const normalSound = document.getElementById("normalSound");
+const submitSound = document.getElementById("submit-answer");
+const popupSound = document.getElementById("popup-button");
+const ignSound = document.getElementById("ign-button");
+
+[submitSound, popupSound, ignSound].forEach(button => {
+    button.addEventListener("click", () => {
+        normalSound.currentTime = 0;
+        normalSound.play();
+    });
+  });
+
+
 
 // Logic to make YES btn to grow
 

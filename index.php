@@ -33,7 +33,12 @@
               I love how you always<strong> make me smile</strong> if I feel sad.
                You are really my <strong>rest, my home, and my happiness MWAH</strong>.
                 I always remember our late night talks and I love how your always <strong> yapping and being so sweet</strong>.
-                 I really appriciate you. You are so kind and nice and also <strong>very pretty!</strong> I alawys love you and I will always choose you Mia.
+                I love it when you are talking about your day or everything, I really enjoy listening to you and It felt good feeling included in your life.
+                I remember when you gifted me, you really made me so happy. You gifted me more than what I asked for HAHA I REALLY APPRICIATE IT LOVES!
+                Also don't worry when you're being moody hehe, <strong>my moody rat</strong>. You being moody don't change anything, I still love you and I won't leave you because you're the girl I really want hehe.
+                Thank you for always being with me Mia <strong>♡</strong> I really love you prescence loves. I love how you always try to understand me and trying to make me happy.
+                I love it when we are being <strong>AHEM</strong><i> "Interesting"</i> hehe<strong>♡</strong>.
+                 I really appriciate you and I love everything about you Mia. I care so much for you. You are so kind and nice and also <strong>very pretty!</strong> I alawys love you and I will always choose you Mia.
                  <strong> I love you very much Happy Valentine's Day ♡ </strong>
           </p>
           <div id="message-img-container" class="message-img">
@@ -48,15 +53,17 @@
     <!-- Letter Screen -->
     <div id="letter-container">
       <div class="letter-window">
-        <h1 id="letter-title">Will you be my Valentine?</h1>
+        <div class="letter letter-content">
+          <h1 id="letter-title">Will you be my Valentine?</h1>
 
-        <img src="cat_heart.gif" class="cat" id="letter-cat" />
+          <img src="cat_heart.gif" class="cat" id="letter-cat" />
 
-        <div class="buttons" id="letter-buttons">
-          <img src="yes.png" class="btn yes-btn" alt="Yes" />
+          <div class="buttons" id="letter-buttons">
+            <img id="yes-img" src="yes.png" class="btn yes-btn" alt="Yes" />
 
-          <div class="no-wrapper">
-            <img src="no.png" class="btn no-btn" alt="No" />
+            <div class="no-wrapper">
+              <img src="no.png" class="btn no-btn" alt="No" />
+            </div>
           </div>
         </div>
 
@@ -78,7 +85,7 @@
             </div>
 
             <p id="final-text" class="final-text" style="display: none">
-              <strong>Valentine Date:</strong> We play when you get home. We will play all night hehe!
+              <strong>Valentine Date:</strong> MLBB at 7pm(When I get home). We will play all night hehe!
             </p>
 
             <!-- Question Form -->
@@ -160,6 +167,31 @@
     <!-- Furina Click Sound -->
     <audio id="furinaSound">
       <source src="audio/furina-voice.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- YES Click Sound -->
+    <audio id="yesSound">
+      <source src="audio/click-yes.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Normal Click Sound -->
+    <audio id="normalSound">
+      <source src="audio/normal-click.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Correct Click Sound -->
+    <audio id="correctSound">
+      <source src="audio/celeb-click.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Blank Click Sound -->
+    <audio id="blankSound">
+      <source src="audio/blank-sounds.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Wrong Click Sound -->
+    <audio id="wrongSound">
+      <source src="audio/wrong-sounds.mp3" type="audio/mpeg">
     </audio>
 
 
