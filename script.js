@@ -78,11 +78,11 @@ yesBtn.addEventListener("click", () => {
 
 const submitBtn = document.getElementById("submit-answer");
 const userAnswer = document.getElementById("mia-answer");
-
 const popup = document.getElementById("feedback-popup");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
 
+const correctAnswers = ["mia", "mohan"];
 const correctSound = document.getElementById("correctSound");
 const blankSound = document.getElementById("blankSound");
 const wrongSound = document.getElementById("wrongSound");
@@ -90,146 +90,132 @@ const wrongSound = document.getElementById("wrongSound");
 submitBtn.addEventListener("click", () => {
     const answer = userAnswer.value.trim().toLowerCase();
 
-    // Send answer to server
-    fetch("check_answer.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "answer=" + encodeURIComponent(answer)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "blank") {
-            // Play correct sound after 0.8s
-            setTimeout(() => {
-                blankSound.currentTime = 0;
-                blankSound.play();
-            }, 500);
+    // Check if blank 
+    if (answer === "") {
+        // Play correct sound after 0.8s 
+        setTimeout(() => {
+            blankSound.currentTime = 0;
+            blankSound.play();
+        }, 500);
 
-            popupText.textContent = "Heyy, type something first Rat! 😤";
-            popupText.style.color = "orange";
+        popupText.textContent = "Heyy, type something first Rat! 😤";
+        popupText.style.color = "orange";
+        popupButton.textContent = "OK";
 
-            popupButton.textContent = "OK";
-            popupButton.onclick = () => popup.classList.remove("show");
-
-        } else if (data.status === "correct") {
-            setTimeout(() => {
-                correctSound.currentTime = 0;
-                correctSound.play();
-            }, 500);
-
-            popupText.textContent = "Correct! MWAAH😘😘";
-            popupText.style.color = "green";
-
-            popupButton.textContent = "One More!";
-            popupButton.onclick = () => {
-                yess.style.display = "none";
-                confirm.style.display = "flex";
-
-                popup.classList.remove("show");
-                userAnswer.value = "";
-
-                setTimeout(() => confirmWindow.classList.add("open"), 50);
-            };
-
-        } else if (data.status === "wrong") {
-            setTimeout(() => {
-                wrongSound.currentTime = 0;
-                wrongSound.play();
-            }, 500);
-
-            popupText.textContent = "Don't Lie! GRR 🐧";
-            popupText.style.color = "red";
-
-            popupButton.textContent = "OK";
-            popupButton.onclick = () => {
-                popup.classList.remove("show");
-                userAnswer.value = "";
-            };
-        }
-
+        popupButton.onclick = () => {
+            popup.classList.remove("show");
+        };
         popup.classList.add("show");
-    });
+        return; // stops the function here
+    }
+
+    // Correct Answer
+    if (correctAnswers.includes(answer)) {
+        // Play correct sound after 0.8s
+        setTimeout(() => {
+            correctSound.currentTime = 0;
+            correctSound.play();
+        }, 500);
+
+        popupText.textContent = "Correct! MWAAH😘😘";
+        popupText.style.color = "green";
+        popupButton.textContent = "One More!";
+        popupButton.onclick = () => {
+            yess.style.display = "none";
+            confirm.style.display = "flex";
+            popup.classList.remove("show");
+            userAnswer.value = "";
+            setTimeout(() => {
+                confirmWindow.classList.add("open");
+            }, 50);
+        };
+    } else {
+        // Play correct sound after 0.8s 
+        setTimeout(() => {
+            wrongSound.currentTime = 0;
+            wrongSound.play();
+        }, 500);
+
+        popupText.textContent = "Don't Lie! GRR 🐧";
+        popupText.style.color = "red";
+        popupButton.textContent = "OK";
+
+        popupButton.onclick = () => {
+            popup.classList.remove("show");
+            userAnswer.value = "";
+        };
+    }
+    popup.classList.add("show");
 });
 
 
 
 const ignBtn = document.getElementById("submit-ign");
 const ignAnswer = document.getElementById("ign-answer");
-
 const ignPopup = document.getElementById("ign-popup");
 const ignText = document.getElementById("ign-text");
 const ignButton = document.getElementById("ign-button");
-
 const miaContainer = document.getElementById("mia-container");
 const miaWindow = document.querySelector("#mia-container .letter-window");
 
-ignBtn.addEventListener("click", () => {
-    const answer = ignAnswer.value.trim().toLowerCase();
+const answerIgn = ["legendaryninja28"];
 
-    // Send answer to server
-    fetch("check_ign.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "answer=" + encodeURIComponent(answer)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "blank") {
-            // Play correct sound after 0.8s
-            setTimeout(() => {
-                blankSound.currentTime = 0;
-                blankSound.play();
-            }, 500);
+ignBtn.addEventListener("click", () => { 
+    const answers = ignAnswer.value.trim().toLowerCase();
+    if (answers === "") {
+        setTimeout(() => {
+            blankSound.currentTime = 0;
+            blankSound.play();
+        }, 500);
 
-            ignText.textContent = "Heyy, you forgot to type something Rat! 😤";
-            ignText.style.color = "orange";
+        ignText.textContent = "Heyy, you forgot to type something Rat! 😤";
 
-            ignButton.textContent = "OK";
-            ignButton.onclick = () => ignPopup.classList.remove("show");
-
-        } else if (data.status === "correct") {
-            setTimeout(() => {
-                correctSound.currentTime = 0;
-                correctSound.play();
-            }, 500);
-
-            ignText.textContent = "Correct! MWAAH😘😘";
-            ignText.style.color = "green";
-
-            ignButton.textContent = "Next";
-            ignButton.onclick = () => {
-                confirm.style.display = "none";
-                miaContainer.style.display = "flex";
-
-                ignPopup.classList.remove("show");
-                ignAnswer.value = "";
-
-                setTimeout(() => {
-                    miaWindow.classList.add("open");
-                }, 50);
-            };
-
-        } else if (data.status === "wrong") {
-            setTimeout(() => {
-                wrongSound.currentTime = 0;
-                wrongSound.play();
-            }, 500);
-
-            ignText.textContent = "Rat, try again! GRR 🐧";
-            ignText.style.color = "red";
-
-            ignButton.textContent = "OK";
-            ignButton.onclick = () => {
-                ignPopup.classList.remove("show");
-                ignAnswer.value = "";
-            };
-        }
+        ignButton.textContent = "OK";
+        ignButton.onclick = () => {
+            ignPopup.classList.remove("show");
+        };
 
         ignPopup.classList.add("show");
-    });
+        return; // stops the function here
+    }
+
+    if (answerIgn.includes(answers)) {
+        setTimeout(() => {
+            correctSound.currentTime = 0;
+            correctSound.play();
+        }, 500);
+
+        ignText.textContent = "Correct! MWAAH😘😘";
+        ignText.style.color = "green";
+
+        ignButton.textContent = "Next";
+
+        ignButton.onclick = () => {
+            confirm.style.display = "none";
+            miaContainer.style.display = "flex";
+            ignPopup.classList.remove("show");
+            ignAnswer.value = "";
+            setTimeout(() => {
+                miaWindow.classList.add("open");
+            }, 50);
+        };
+    } else {
+        // Play correct sound after 0.8s 
+        setTimeout(() => {
+            wrongSound.currentTime = 0;
+            wrongSound.play();
+        }, 500);
+
+        ignText.textContent = "Rat, try again! GRR 🐧";
+        ignText.style.color = "red";
+        ignButton.textContent = "OK";
+
+        ignButton.onclick = () => { ignPopup.classList.remove("show");
+            ignAnswer.value = "";
+        };
+    }
+    ignPopup.classList.add("show"); 
 });
-
-
 
 
 // Backgroud Audio
